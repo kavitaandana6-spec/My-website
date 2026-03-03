@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reels Empire ULTRA</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<style>
+:root{
+  --accent1:#ff0066;
+  --accent2:#ffcc00;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+  background:#020617;
+  color:#fff;
+  min-height:100vh;
+  padding-bottom:90px;
+  overflow-x:hidden;
+}
+
+/* animated bg */
+body::before{
+  content:"";
+  position:fixed;
+  inset:-40%;
+  background:conic-gradient(from 0deg,var(--accent1),var(--accent2),#00f0ff,var(--accent1));
+  filter:blur(130px);
+  opacity:.25;
+  animation:spinBg 22s linear infinite;
+  z-index:-1;
+}
+@keyframes spinBg{to{transform:rotate(360deg)}}
+
+/* header */
+header{
+  padding:18px 24px;
+  text-align:center;
+  font-weight:800;
+  font-size:clamp(20px,4vw,26px);
+  background:rgba(255,255,255,.05);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  position:relative;
+}
+
+#adminOpen{
+  position:absolute;
+  right:18px;
+  top:18px;
+  cursor:pointer;
+  opacity:.6;
+}
+
+/* layout */
+.container{max-width:1000px;margin:auto;padding:22px;}
+
+/* glass ultra */
+.glass{
+  background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:28px;
+  backdrop-filter:blur(28px) saturate(140%);
+  box-shadow:0 30px 80px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+/* hero */
+.hero{
+  padding:36px;
+  text-align:center;
+  margin-top:18px;
+  animation:fadeUp .7s cubic-bezier(.22,1,.36,1);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.badge{
+  position:absolute;
+  top:-12px;
+  right:18px;
+  background:linear-gradient(45deg,var(--accent1),var(--accent2));
+  color:#000;
+  padding:6px 14px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.hero h1{
+  font-size:clamp(28px,5vw,42px);
+  font-weight:800;
+  background:linear-gradient(90deg,var(--accent1),var(--accent2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.features{margin-top:14px;font-size:14px;opacity:.9;}
+
+.price{
+  font-size:clamp(38px,6vw,48px);
+  font-weight:800;
+  color:var(--accent2);
+  margin:18px 0;
+}
+
+.btn{
+  width:100%;
+  padding:18px;
+  border:none;
+  border-radius:18px;
+  font-weight:800;
+  font-size:18px;
+  cursor:pointer;
+  background:linear-gradient(45deg,var(--accent1),var(--accent2));
+  color:#000;
+}
+
+.bundle{padding:26px;}
+.item{
+  padding:14px 0;
+  border-bottom:1px dashed rgba(255,255,255,.1);
+  display:flex;
+  justify-content:space-between;
+}
+.access{color:#60a5fa;font-weight:800;cursor:pointer;}
+
+.danger{
+  margin-top:24px;
+  border:1.5px solid #ff3b3b;
+  background:rgba(255,0,0,.08);
+  padding:16px;
+  border-radius:16px;
+  text-align:center;
+  font-weight:700;
+}
+
+/* popup */
+#popup{
+  position:fixed;
+  left:20px;
+  bottom:100px;
+  background:#111;
+  padding:12px 16px;
+  border-radius:14px;
+  font-size:13px;
+  display:none;
+  z-index:9999;
+}
+
+/* admin */
+#adminPanel{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#020617;
+  z-index:99999;
+  padding:24px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+⚡ Reels Empire ULTRA
+<span id="adminOpen">⚙️</span>
+</header>
+
+<div class="container">
+
+<!-- PRODUCT -->
+<div id="productPage" class="glass hero">
+  <h1>🔥 2000+ Viral Reels Bundle</h1>
+  <div class="features">⚡ Instant • 💎 Lifetime • 🚀 Trending</div>
+  <div class="price">₹199</div>
+  <button id="buyBtn" class="btn">⚡ Unlock Bundle Now</button>
+  <div id="timer" style="margin-top:10px;color:#ffcc00;font-weight:700"></div>
+  <div id="liveCount" style="margin-top:6px;font-size:13px;opacity:.8"></div>
+</div>
+
+<!-- SUCCESS -->
+<div id="successPage" class="success" style="display:none">
+  <h1 style="text-align:center">🎉 Purchase Successful</h1>
+
+  <div class="glass bundle">
+    <div class="item"><span>Hindi Animated Bundle</span><span class="access" data-link>Access</span></div>
+    <div class="item"><span>AI Kahani Bundle</span><span class="access" data-link>Access</span></div>
+    <div class="item"><span>4K Reels</span><span class="access" data-link>Access</span></div>
+  </div>
+
+  <div class="danger glass">
+    ⚠️ Personal use only. Redistribution prohibited.
+  </div>
+</div>
+
+</div>
+
+<div id="popup"></div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" class="glass">
+<h2>🛠 Admin Panel</h2>
+<button class="btn" onclick="resetBuyers()">Reset Buyers</button>
+<button class="btn" style="margin-top:12px" onclick="forceUnlock()">Force Unlock</button>
+<button class="btn" style="margin-top:12px" onclick="closeAdmin()">Close</button>
+</div>
+
+<script>
+// ================= LIVE COUNTER
+function updateCounter(){
+  const num = Math.floor(150 + Math.random()*120);
+  liveCount.innerText=`🔥 ${num} bought in last 24 hours`;
+}
+setInterval(updateCounter,4000);
+updateCounter();
+
+// ================= TIMER
+let time=900;
+function updateTimer(){
+  const m=Math.floor(time/60);
+  const s=time%60;
+  timer.innerText=`⏳ Offer expires in ${m}:${s.toString().padStart(2,'0')}`;
+  if(time>0) time--;
+}
+setInterval(updateTimer,1000);
+updateTimer();
+
+// ================= RAZORPAY
+buyBtn.onclick=()=>{
+  const options={
+    key:"rzp_test_xxxxx", // CHANGE
+    amount:19900,
+    currency:"INR",
+    name:"Reels Empire ULTRA",
+    description:"2000+ Viral Reels Bundle",
+    handler:function(){
+      localStorage.setItem("reelsEmpirePaid","yes");
+      productPage.style.display="none";
+      successPage.style.display="block";
+
+      // WhatsApp auto message
+      window.open("https://wa.me/91XXXXXXXXXX?text=I%20purchased%20Reels%20Bundle","_blank");
+    }
+  };
+  new Razorpay(options).open();
+};
+
+// ================= AUTO UNLOCK
+if(localStorage.getItem("reelsEmpirePaid")==="yes"){
+  productPage.style.display="none";
+  successPage.style.display="block";
+}
+
+// ================= ACCESS LINKS
+document.querySelectorAll("[data-link]").forEach(b=>{
+  b.onclick=()=>window.open("https://www.instagram.com/reels/","_blank");
+});
+
+// ================= SOCIAL POPUP
+const cities=["Mumbai","Delhi","Jaipur","Surat","Pune"];
+function showPopup(){
+  popup.innerText=`🔥 Someone from ${cities[Math.floor(Math.random()*cities.length)]} purchased`;
+  popup.style.display="block";
+  setTimeout(()=>popup.style.display="none",3000);
+}
+setInterval(showPopup,7000);
+
+// ================= ADMIN SECRET
+let taps=0;
+adminOpen.onclick=()=>{
+  taps++;
+  if(taps>=5){adminPanel.style.display="block";taps=0;}
+  setTimeout(()=>taps=0,2000);
+};
+
+function closeAdmin(){adminPanel.style.display="none";}
+function resetBuyers(){localStorage.removeItem("reelsEmpirePaid");alert("Reset done");}
+function forceUnlock(){localStorage.setItem("reelsEmpirePaid","yes");alert("Unlocked");}
+</script>
+
+</body>
+  </html>
